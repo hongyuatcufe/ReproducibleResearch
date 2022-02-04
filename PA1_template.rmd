@@ -3,6 +3,7 @@ title: "week2 project"
 author: "hongyuatcufe"
 date: "2022/2/2"
 output:
+  pdf_document: default
   html_document: default
 ---
 
@@ -66,12 +67,59 @@ steps_per_interval <- activity %>%
 
 plot(steps_per_interval,type='l')
 max_step_interval=steps_per_interval[steps_per_interval$steps==max(steps_per_interval$steps),'interval']
-print(paste('The max of the average number of steps taken occur in interval', max_step_interval))
+
+print(paste('The max of the average number of steps taken occur in interval', max_step_interval,'and the max steps is about',round(max(steps_per_interval$steps),0),'steps!'))
 ```
 
 The max of the average number of steps taken occur at 8:35 AM. 
 
 ## Imputing missing values
 
+Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+
+```{r echo=TRUE}
+
+steps_missing=sum(is.na(activity$steps))
+print(paste('The total number of missing values in the dataset is',steps_missing))
+
+```
+
+filling in all of the missing values in the dataset with mean of steps of relevant day and Create a new dataset
+
+```{r echo=TRUE}
+activity_changed = activity %>%
+  merge(.,steps_per_day,by="date") %>%
+  # every day has 288 intervals, it could be caculate as: 24(hours) * 60(minutes per hour) / 5(minutes per interval)
+  # mean of every interval of day could be caculate as: total steps of that day / 288 intervals
+  mutate(steps.x=ifelse(is.na(steps.x),steps.y/288,steps.x)) %>%
+  select(steps.x,date,interval) %>%
+  rename(steps=steps.x)
+
+# the NA in dataset activity changed to mean for relevant 5-minute interval as blow:
+head(activity_changed[is.na(activity$steps),])
+```
+
+
+Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day
+
+```{r echo=TRUE}
+
+steps_per_day_new <- activity_changed %>%
+  group_by(date) %>%
+  summarise(steps=sum(steps))
+
+hist(steps_per_day_new$steps,breaks=10)
+
+# Caculate the mean and median of steps
+steps_mean_new=mean(steps_per_day_new$steps)
+steps_median_new=median(steps_per_day_new$steps)
+# print the results
+print(paste('The mean of steps per day  with missing values filled is',round(steps_mean_new,2),'and',
+      paste("The median of steps per day with missing values filled is",round(steps_median_new,2))))
+
+```
+
+
+Use to replace 
 
 
