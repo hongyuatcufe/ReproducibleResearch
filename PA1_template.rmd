@@ -1,0 +1,77 @@
+---
+title: "week2 project"
+author: "hongyuatcufe"
+date: "2022/2/2"
+output:
+  html_document: default
+---
+
+# Week2 project by hongyuatcufe
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1.Loading and preprocessing the data
+
+Read activity.csv file to variable activity.
+
+
+```{r echo=TRUE}
+activity=read.csv('activity.csv')
+activity[[2]]=as.Date(activity[[2]])
+head(activity)
+```
+
+## 2.Caculate the mean total number of steps taken per day
+
+Calculate the total number of steps taken per day
+
+```{r echo=TRUE,message=FALSE}
+library(dplyr)
+
+steps_per_day <- activity %>%
+  group_by(date) %>%
+  summarise(steps=sum(steps,na.rm=TRUE))
+
+head(steps_per_day)
+```
+
+Make a histogram of the total number of steps taken each day
+
+```{r echo=TRUE}
+# set breaks to 10 to make the histogram show more details
+hist(steps_per_day$steps,breaks=10)
+```
+
+Calculate and report the mean and median of the total number of steps taken per day
+
+```{r echo=TRUE}
+# Caculate the mean and median of steps
+steps_mean=mean(steps_per_day$steps)
+steps_median=median(steps_per_day$steps)
+# print the results
+print(paste('The mean of steps per day is',round(steps_mean,2),'and',
+      paste("The median of steps per day is",steps_median)))
+```
+
+## 3.Caculate the average daily activity pattern
+
+time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+
+```{r echo=TRUE,message=FALSE}
+steps_per_interval <- activity %>%
+  group_by(interval) %>%
+  summarise(steps=mean(steps,na.rm=TRUE))
+
+plot(steps_per_interval,type='l')
+max_step_interval=steps_per_interval[steps_per_interval$steps==max(steps_per_interval$steps),'interval']
+print(paste('The max of the average number of steps taken occur in interval', max_step_interval))
+```
+
+The max of the average number of steps taken occur 8:35 AM. 
+
+## Imputing missing values
+
+
+
