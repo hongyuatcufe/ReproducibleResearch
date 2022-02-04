@@ -69,7 +69,7 @@ max_step_interval=steps_per_interval[steps_per_interval$steps==max(steps_per_int
 print(paste('The max of the average number of steps taken occur in interval', max_step_interval))
 ```
 
-The max of the average number of steps taken occur 8:35 AM. 
+The max of the average number of steps taken occur at 8:35 AM. 
 
 ## Imputing missing values
 
