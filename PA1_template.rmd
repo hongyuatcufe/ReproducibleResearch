@@ -1,7 +1,7 @@
 ---
 title: "week2 project"
 author: "hongyuatcufe"
-date: "2022/2/2"
+date: "2022/2/5"
 output:
   html_document: default
   pdf_document: default
@@ -11,6 +11,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(base.dir = 'figs')
 ```
 
 ## 1.Loading and preprocessing the data
@@ -121,5 +122,50 @@ print(paste('The mean of steps per day  with missing values filled is',round(ste
 After missing values in the dataset is imputed by the mean of steps number of relevent interval, the mean step increased from 9354.23 to 10766.19, and median increased from 10395 to 10766.19. It's worth noting that After imputing, the mean and median of steps become the same.
 
 
+## Differences in activity patterns between weekdays and weekends
+
+Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+
+```{r echo=TRUE}
+activity_changed = activity_changed %>%
+  mutate(is_weekday=case_when(weekdays(date) %in% c("星期一",
+                                                    "星期二",
+                                                    "星期三",
+                                                    "星期四",
+                                                    "星期五") ~ 'weekday',
+                              weekdays(date) %in% c("星期六",
+                                                    "星期日") ~ 'weekend'))
+
+table(activity_changed$is_weekday)
+
+steps_per_interval_changed <- activity_changed %>%
+  group_by(interval,is_weekday) %>%
+  summarise(steps=mean(steps,na.rm=TRUE))
+
+head(steps_per_interval_changed)
+```
+
+Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+
+```{r echo=TRUE}
+library(ggplot2)
+
+steps_per_interval_changed %>%
+  ggplot( aes(x=interval, y=steps)) +
+  geom_line() +
+  facet_wrap(~is_weekday,nrow=2)
+
+```
 
 
+A better way to compare the step of weekday and weekend is to put two chart together and show lines in different color as blow:
+
+```{r echo=TRUE}
+steps_per_interval_changed %>%
+  ggplot( aes(x=interval, y=steps, group=is_weekday,color=is_weekday)) +
+  geom_line()
+
+```
+
+
+It seems that steps number in 8:00 AM to 9:00 AM of weekend is less than weekday, and steps number of weekend is much more than weekday in 11:00 AM to 12:00 AM and 4:00 PM to 6:00 PM. 
