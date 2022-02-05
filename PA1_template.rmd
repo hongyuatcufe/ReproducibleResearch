@@ -84,19 +84,17 @@ print(paste('The total number of missing values in the dataset is',steps_missing
 
 ```
 
-filling in all of the missing values in the dataset with mean of steps of relevant day and Create a new dataset
+filling in all of the missing values in the dataset with mean of steps of relevant interval and Create a new dataset
 
 ```{r echo=TRUE}
 activity_changed = activity %>%
-  merge(.,steps_per_day,by="date") %>%
-  # every day has 288 intervals, it could be caculate as: 24(hours) * 60(minutes per hour) / 5(minutes per interval)
-  # mean of every interval of day could be caculate as: total steps of that day / 288 intervals
-  mutate(steps.x=ifelse(is.na(steps.x),steps.y/288,steps.x)) %>%
+  left_join(.,steps_per_interval,by="interval") %>%
+  mutate(steps.x=ifelse(is.na(steps.x),steps.y,steps.x)) %>%
   select(steps.x,date,interval) %>%
   rename(steps=steps.x)
 
 # the NA in dataset activity changed to mean for relevant 5-minute interval as blow:
-head(activity_changed[is.na(activity$steps),])
+head(activity_changed)
 ```
 
 
@@ -120,6 +118,8 @@ print(paste('The mean of steps per day  with missing values filled is',round(ste
 ```
 
 
-Use to replace 
+After missing values in the dataset is imputed by the mean of steps number of relevent interval, the mean step increased from 9354.23 to 10766.19, and median increased from 10395 to 10766.19. It's worth noting that After imputing, the mean and median of steps become the same.
+
+
 
 
