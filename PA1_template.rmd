@@ -22,7 +22,6 @@ Read activity.csv file to variable activity.
 ```{r echo=TRUE}
 activity=read.csv('activity.csv')
 activity[[2]]=as.Date(activity[[2]])
-head(activity)
 ```
 
 ## 2.Caculate the mean total number of steps taken per day
