@@ -3,8 +3,8 @@ title: "week2 project"
 author: "hongyuatcufe"
 date: "2022/2/2"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 # Week2 project by hongyuatcufe
