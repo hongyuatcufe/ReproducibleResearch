@@ -191,7 +191,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">week2 project</h1>
 <h4 class="author">hongyuatcufe</h4>
-<h4 class="date">2022/2/2</h4>
+<h4 class="date">2022/2/5</h4>
 
 </div>
 
@@ -202,15 +202,7 @@ $(document).ready(function () {
 <h2>1.Loading and preprocessing the data</h2>
 <p>Read activity.csv file to variable activity.</p>
 <pre class="r"><code>activity=read.csv(&#39;activity.csv&#39;)
-activity[[2]]=as.Date(activity[[2]])
-head(activity)</code></pre>
-<pre><code>##   steps       date interval
-## 1    NA 2012-10-01        0
-## 2    NA 2012-10-01        5
-## 3    NA 2012-10-01       10
-## 4    NA 2012-10-01       15
-## 5    NA 2012-10-01       20
-## 6    NA 2012-10-01       25</code></pre>
+activity[[2]]=as.Date(activity[[2]])</code></pre>
 </div>
 <div id="caculate-the-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>2.Caculate the mean total number of steps taken per day</h2>
@@ -317,22 +309,17 @@ table(activity_changed$is_weekday)</code></pre>
   group_by(interval,is_weekday) %&gt;%
   summarise(steps=mean(steps,na.rm=TRUE))
 
-steps_per_interval_changed</code></pre>
-<pre><code>## # A tibble: 576 x 3
-## # Groups:   interval [288]
-##    interval is_weekday   steps
-##       &lt;int&gt; &lt;chr&gt;        &lt;dbl&gt;
-##  1        0 weekday    2.25   
-##  2        0 weekend    0.215  
-##  3        5 weekday    0.445  
-##  4        5 weekend    0.0425 
-##  5       10 weekday    0.173  
-##  6       10 weekend    0.0165 
-##  7       15 weekday    0.198  
-##  8       15 weekend    0.0189 
-##  9       20 weekday    0.0990 
-## 10       20 weekend    0.00943
-## # … with 566 more rows</code></pre>
+head(steps_per_interval_changed)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+## # Groups:   interval [3]
+##   interval is_weekday  steps
+##      &lt;int&gt; &lt;chr&gt;       &lt;dbl&gt;
+## 1        0 weekday    2.25  
+## 2        0 weekend    0.215 
+## 3        5 weekday    0.445 
+## 4        5 weekend    0.0425
+## 5       10 weekday    0.173 
+## 6       10 weekend    0.0165</code></pre>
 <p>Make a panel plot containing a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).</p>
 <pre class="r"><code>library(ggplot2)</code></pre>
 <pre><code>## Registered S3 methods overwritten by &#39;ggplot2&#39;:
